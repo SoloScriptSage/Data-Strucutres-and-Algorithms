@@ -116,6 +116,7 @@ void LinkedList::printList() {
 }
 
 int main() {
+
 	LinkedList list;
 	list.insertNode(5);
 	list.insertNode(2);
