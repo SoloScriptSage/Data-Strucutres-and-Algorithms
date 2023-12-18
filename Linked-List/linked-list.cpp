@@ -1,129 +1,170 @@
-/*
+#include <bits/stdc++.h>
 
-██╗░░░░░██╗███╗░░██╗██╗░░██╗███████╗██████╗░  ██╗░░░░░██╗░██████╗████████╗
-██║░░░░░██║████╗░██║██║░██╔╝██╔════╝██╔══██╗  ██║░░░░░██║██╔════╝╚══██╔══╝
-██║░░░░░██║██╔██╗██║█████═╝░█████╗░░██║░░██║  ██║░░░░░██║╚█████╗░░░░██║░░░
-██║░░░░░██║██║╚████║██╔═██╗░██╔══╝░░██║░░██║  ██║░░░░░██║░╚═══██╗░░░██║░░░
-███████╗██║██║░╚███║██║░╚██╗███████╗██████╔╝  ███████╗██║██████╔╝░░░██║░░░
-╚══════╝╚═╝╚═╝░░╚══╝╚═╝░░╚═╝╚══════╝╚═════╝░  ╚══════╝╚═╝╚═════╝░░░░╚═╝░░░
 
-*/
-
-#include <iostream>
 using namespace std;
 
-// Class Node
-class Node {
+
+class Node{
 public:
-	int num;	// data
-	Node* next_node;	// pointer where the example of the class located in memory to the next node
+    int num;
+    Node* next_node;
 
-	Node() {
-		num = 0;		// initiallize everything to zero in constructor
-		next_node = NULL;
-	}
+    Node(){
+        num = 0;
+        next_node = NULL;
+    }
 
-	Node(int num) {		// when creating a new node to keep the information in constructor
-		this->num = num;
-		this->next_node = next_node;
-	}
+    Node(int num){
+        this->num = num;
+        this->next_node = NULL;
+    }
+
 };
 
-class LinkedList {
-	Node* head; // where is the head node in the memory
+class LinkedList{
+    Node* head;
 
-	public:
-		LinkedList() {
-			head = NULL;
-		}
+public:
+    LinkedList(){
+        head=NULL;
+    }
 
-		void insertNode(int);		// insert a new node
-		void deleteNode(int);		// delete node and connect neighbours
-		void printList();			// print the list
+    void insertNode(int);
+    void deleteNode(int);
+    void sortList();
+    void printList();
 };
 
-void LinkedList::insertNode(int data) {
-	Node* newNode = new Node(data); // creating a new node and adding data to the constructor of a new node
+void LinkedList::insertNode(int data){
+    Node* newNode = new Node(data);     // new node with data inserted
 
-	if (head == NULL) {	// if head of the list is absent
-		head = newNode;
-		return;	// if we don't have any list yet, the newNode is gonna be the head of the list
-	}
+    if(head==NULL){
+        head=newNode; return;}      // if head doesn't exist, newnode is gonna be the head of the linked list
 
-	// if we do have a head
-	Node* temp = head;
-	while (temp->next_node != NULL) {
-		temp = temp->next_node;
-	} // running to find the end
+    // in case we have head of the linkedlist
 
-	temp->next_node = newNode; // assigning at the end of the linked list newNode
+    Node* temp = head;
+
+    while(temp->next_node != NULL){
+        temp = temp->next_node;
+    }
+
+    temp->next_node = newNode;
 }
 
-void LinkedList::deleteNode(int index) {	// index to delete
-	Node* temp1 = head, * temp2 = NULL;
-	int ListLength = 0;
+void LinkedList::deleteNode(int index){
+    Node* _head = head, *temp2 = NULL;
+    int ll = 0;
 
-	// in case list is empty
-	if (head == NULL) {
-		cout << "List is empty!" << endl;
-		return;
-	}
 
-	// running through the list and counting its length
-	while (temp1 != NULL) {
-		temp1 = temp1->next_node;
-		ListLength++;
-	}
+    if(head==NULL){
+        cout << "list is empty" << endl;
+    }
 
-	if (ListLength < index)
-	{
-		cout << "Index out of range" << endl;
-		return;
-	}
+    // in case head exists
+    while(_head != NULL){
+        _head = _head->next_node; // trying to find the last node
+        ll++;
+    }
 
-	temp1 = head; // assigning the temp1 as a head again
+    if(ll < index){
+        cout << "index out of range" << endl;
+    }
 
-	// if index is 1 which is head we move !HEAD! to the right and delete the first node
-	if (index == 1) {
-		head = head->next_node;
-		delete temp1;
-		return;
-	}
 
-	while (index-- > 1) {
-		temp2 = temp1;
-		temp1 = temp1->next_node;
-	}
+    /* before the sequence of stupid checks */
 
-	temp2->next_node = temp1->next_node;
+    _head = head; // the first head
 
-	delete temp1;
+    if(index == 1){
+        Node* temp = head;
+        head = head->next_node;
+        delete temp;
+        return;
+    }
+
+    while(index-- > 1){
+        temp2 = _head;
+        _head = _head->next_node;
+    }
+
+    temp2->next_node = _head->next_node;
+
+    delete _head;
+
 }
 
-void LinkedList::printList() {
-	Node* temp = head;
 
-	if (head == NULL) {
-		cout << "Empty list."
-			<< endl;
-		return;
-	}
+void LinkedList::printList(){
+    Node* temp = head;
 
-	while (temp != NULL) {
-		cout << temp->num << " ";
-		temp = temp->next_node;
-	}
+    if(head==NULL){
+        cout << "head doesn't exist" << endl;
+        return;
+    }
+
+    int i = 0;
+
+    while(temp != NULL){
+
+        cout << ++i << " " << temp->num;
+        if(temp->next_node != NULL){
+            cout << " -> ";
+        }
+        temp = temp->next_node;
+    }
 }
+
+void LinkedList::sortList(){
+    if(head==NULL || head->next_node==NULL)
+    {
+        cout << "nothing to swap or there's no values to sort" << endl;
+        return;
+    }
+
+    bool swapped;
+    Node* current;
+    Node* lastSorted = NULL;
+
+    do{
+        swapped = false;
+        current = head;
+
+        while(current->next_node != lastSorted){
+
+            if(current->num > current->next_node->num){
+
+                int temp = current->num;
+
+                current->num = current->next_node->num;
+                current->next_node->num = temp;
+
+                swapped = true;
+            }
+
+            current = current->next_node;
+        }
+        lastSorted = current;
+    }while(swapped);
+}
+
+int n, number;
 
 int main() {
 
-	LinkedList list;
-	list.insertNode(5);
-	list.insertNode(2);
-	list.insertNode(4);
+    LinkedList lli;
 
-	cout << "Elements of the list: ";
-	list.printList();
+    cout << "nodes-amount: ";
+    cin >> n;
 
-  return 0;
+    for(int i = 0; i < n; ++i){
+        cin >> number;
+        lli.insertNode(number);
+    }
+
+    cout << "usual-list: "; lli.printList(); cout << endl;
+    cout << "sorted-list: "; lli.sortList(); lli.printList();
+
+    return 0;
+
 }
